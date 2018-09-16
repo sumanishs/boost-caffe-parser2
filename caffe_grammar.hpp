@@ -117,6 +117,7 @@ struct caffe_grammar
         value_type_ = tok.int_constant [PrintInt()]
                      | tok.double_constant [PrintDouble()]
                      ;
+        lrn_k_  = tok.lrn_k_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
 
         param_            = tok.param_            [PrintStr()] >> '{' >> +param_statements_ >> '}';
         param_statements_ = lr_mult_
@@ -157,6 +158,7 @@ struct caffe_grammar
                                | beta_
                                | weight_filler_
                                | bias_filler_
+                               | lrn_k_
                                ; 
 
         pooling_param_  = tok.pooling_param_ [PrintStr()] >> '{' >> +pooling_param_statements_ >> '}';
@@ -243,7 +245,8 @@ struct caffe_grammar
                                                      dropout_param_statements_, layer_, layer_statements_, weight_filler_, weight_filler_statements_,
                                                      bias_filler_, bias_filler_statements_, source_, backend_, batch_size_, crop_size_, mirror_,
                                                      channels_, height_, width_, mean_, std_, value_, value_type_, data_param_, data_param_statements_,
-                                                     transform_param_, transform_param_statements_, memory_data_param_, memory_data_param_statements_
+                                                     transform_param_, transform_param_statements_, memory_data_param_, memory_data_param_statements_,
+                                                     lrn_k_   
                                                      ;
 
     qi::rule<Iterator, std::string(), qi::in_state_skipper<Lexer> > string_;

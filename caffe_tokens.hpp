@@ -61,6 +61,7 @@ enum token_ids
     ID_DATA_PARAM,
     ID_TRANSFORM_PARAM,
     ID_MEMORY_DATA_PARAM,
+    ID_LRN_K,
     ID_LAYER,
     ID_IDENTIFIER,
 };
@@ -119,6 +120,7 @@ struct caffe_tokens : lex::lexer<Lexer>
         data_param_     = "data_param";
         transform_param_ = "transform_param";
         memory_data_param_ = "memory_data_param";
+        lrn_k_          = "k";
 
         this->self = lex::token_def<>('(') | ')' | '{' | '}' | '=' | ';' | ':' | '"' | '"';
 
@@ -171,6 +173,7 @@ struct caffe_tokens : lex::lexer<Lexer>
             (data_param_, ID_DATA_PARAM)
             (transform_param_, ID_TRANSFORM_PARAM)
             (memory_data_param_, ID_MEMORY_DATA_PARAM)
+            (lrn_k_, ID_LRN_K)
             (identifier, ID_IDENTIFIER)
         ;
 
@@ -186,7 +189,7 @@ struct caffe_tokens : lex::lexer<Lexer>
                                 convolution_param_, lrn_param_, pooling_param_, inner_product_param_, dropout_param_,
                                 layer_, weight_filler_, bias_filler_, source_, backend_, batch_size_, crop_size_, mirror_,
                                 channels_, height_, width_, mean_, std_, value_, data_param_, transform_param_,
-                                memory_data_param_
+                                memory_data_param_, lrn_k_
                                 ;
     lex::token_def<unsigned int> int_constant;
     lex::token_def<double> double_constant;
