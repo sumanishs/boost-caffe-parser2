@@ -180,6 +180,7 @@ struct caffe_tokens : lex::lexer<Lexer>
         this->self("WS") 
             =   lex::token_def<>("[ \\t\\n]+") 
             |   "\\/\\*[^*]*\\*+([^/*][^*]*\\*+)*\\/"
+            |   "#[^\\n]*"
             ;
     }
 
