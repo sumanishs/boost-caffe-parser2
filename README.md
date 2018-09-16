@@ -14,7 +14,8 @@ It's under development and not guaranteed to parse all files.
 THIS Parser only parses and prints the token and values in std::out.
 Parse tree is not developed. Sample functors are added. It's user's 
 resposibility to design their own parse tree and parse tree population
-functors in the caffe_functors.hpp.
+functors in the caffe_functors.hpp. A dummy parse tree builder provided
+to follow the same coding pattern to design parse tree builder.
 
 Developement environment:
 Fedora 28,
