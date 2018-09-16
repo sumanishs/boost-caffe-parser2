@@ -15,6 +15,8 @@
 #include <fstream>
 #include <string>
 
+#include "caffe_parse_tree_builder.hpp"
+
 using namespace boost::spirit;
 
 bool 
@@ -27,8 +29,10 @@ CaffeReader::Read(std::string& filename){
     typedef caffe_tokens::iterator_type iterator_type;
     typedef caffe_grammar<iterator_type, caffe_tokens::lexer_def> caffe_grammar;
 
+    CaffeParseTreeBuilder* ptb = new CaffeParseTreeBuilder();
+
     caffe_tokens tokens;                         // Our lexer
-    caffe_grammar grammar(tokens);                  // Our parser
+    caffe_grammar grammar(tokens, ptb);                  // Our parser
 
     std::ifstream inFile;
     inFile.open(filename.c_str());
