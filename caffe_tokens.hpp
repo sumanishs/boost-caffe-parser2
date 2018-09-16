@@ -16,6 +16,7 @@ enum token_ids
 {
     ID_INT_CONSTANT = 1000,
     ID_DOUBLE_CONSTANT,
+    ID_DOUBLE_EXP_CONSTANT,
     ID_NAME,
     ID_PHASE,
     ID_TYPE,
@@ -62,6 +63,7 @@ enum token_ids
     ID_TRANSFORM_PARAM,
     ID_MEMORY_DATA_PARAM,
     ID_LRN_K,
+    ID_NORM_REGION,
     ID_LAYER,
     ID_IDENTIFIER,
 };
@@ -74,6 +76,7 @@ struct caffe_tokens : lex::lexer<Lexer>
         identifier      = "[a-zA-Z_][a-zA-Z0-9_.\\\-\\\/]*";
         int_constant    = "[0-9]+";
         double_constant = "[0-9]+.[0-9]+";
+        double_exp_constant = "[0-9]+e-[0-9]+";
         name_           = "name";
         phase_          = "phase";
         type_           = "type";
@@ -121,12 +124,14 @@ struct caffe_tokens : lex::lexer<Lexer>
         transform_param_ = "transform_param";
         memory_data_param_ = "memory_data_param";
         lrn_k_          = "k";
+        norm_region_    = "norm_region";
 
         this->self = lex::token_def<>('(') | ')' | '{' | '}' | '=' | ';' | ':' | '"' | '"';
 
         this->self.add
             (int_constant, ID_INT_CONSTANT)
             (double_constant, ID_DOUBLE_CONSTANT)
+            (double_exp_constant, ID_DOUBLE_EXP_CONSTANT)
             (name_, ID_NAME)
             (phase_, ID_PHASE)
             (type_, ID_TYPE)
@@ -174,6 +179,7 @@ struct caffe_tokens : lex::lexer<Lexer>
             (transform_param_, ID_TRANSFORM_PARAM)
             (memory_data_param_, ID_MEMORY_DATA_PARAM)
             (lrn_k_, ID_LRN_K)
+            (norm_region_, ID_NORM_REGION)
             (identifier, ID_IDENTIFIER)
         ;
 
@@ -190,7 +196,7 @@ struct caffe_tokens : lex::lexer<Lexer>
                                 convolution_param_, lrn_param_, pooling_param_, inner_product_param_, dropout_param_,
                                 layer_, weight_filler_, bias_filler_, source_, backend_, batch_size_, crop_size_, mirror_,
                                 channels_, height_, width_, mean_, std_, value_, data_param_, transform_param_,
-                                memory_data_param_, lrn_k_
+                                memory_data_param_, lrn_k_, double_exp_constant, norm_region_
                                 ;
     lex::token_def<unsigned int> int_constant;
     lex::token_def<double> double_constant;
