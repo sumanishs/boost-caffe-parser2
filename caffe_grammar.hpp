@@ -56,6 +56,20 @@ struct caffe_grammar
                     | inner_product_param_
                     | dropout_param_
                     | layer_
+                    | source_ 
+                    | backend_ 
+                    | batch_size_ 
+                    | crop_size_ 
+                    | mirror_ 
+                    | channels_ 
+                    | height_
+                    | width_ 
+                    | mean_ 
+                    | std_ 
+                    | value_
+                    | data_param_
+                    | transform_param_
+                    | memory_data_param_
                     ;
 
         phase_          = tok.phase_    [PrintStr()] >> ':' >> str_identifier [PrintStr()];
@@ -89,8 +103,19 @@ struct caffe_grammar
         dropout_ratio_  = tok.dropout_ratio_    [PrintStr()] >> ':' >> tok.double_constant  [PrintDouble()];
         input_shape_    = tok.input_shape_      [PrintStr()] >> '{' >> +input_shape_statements_ >> '}';
         input_shape_statements_ = dim_;
+        source_ =   tok.source_ [PrintStr()] >> ':' >> str_identifier [PrintStr()];
+        backend_ =  tok.backend_ [PrintStr()] >> ':' >> str_identifier [PrintStr()];
+        batch_size_ = tok.batch_size_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        crop_size_ = tok.crop_size_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        mirror_ = tok.mirror_ [PrintStr()] >> ':' >> str_identifier [PrintStr()];
+        channels_ = tok.channels_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        height_ = tok.height_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        width_ = tok.width_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        mean_ = tok.mean_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        std_ =  tok.std_ [PrintStr()] >> ':' >> tok.double_constant [PrintDouble()];
+        value_ = tok.value_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
 
-        param_          = tok.param_            [PrintStr()] >> '{' >> +param_statements_ >> '}';
+        param_            = tok.param_            [PrintStr()] >> '{' >> +param_statements_ >> '}';
         param_statements_ = lr_mult_
                            | decay_mult_
                            ;
@@ -99,12 +124,18 @@ struct caffe_grammar
         weight_filler_statements_   = type_
                                      | stride_
                                      | pad_
+                                     | mean_    
+                                     | std_
+                                     | value_
                                      ;   
         
         bias_filler_  = tok.bias_filler_ [PrintStr()] >> '{' >> +bias_filler_statements_ >> '}';
         bias_filler_statements_   = type_
                                      | stride_
                                      | pad_
+                                     | mean_    
+                                     | std_
+                                     | value_
                                      ;   
 
         convolution_param_ = tok.convolution_param_ [PrintStr()] >> '{' >> +convolution_param_statements_ >> '}';
@@ -150,17 +181,40 @@ struct caffe_grammar
                                    | bias_filler_
                                    ;     
 
+        data_param_ = tok.data_param_ >> '{' >> +data_param_statements_ >> '}';
+        data_param_statements_ = source_
+                                | backend_
+                                | batch_size_
+                                ;
+
+        transform_param_ = tok.transform_param_ >> '{' >> +transform_param_statements_ >> '}';
+        transform_param_statements_ = crop_size_
+                                     | mirror_
+                                     | mean_file_
+                                     ;   
+
+        memory_data_param_  = tok.memory_data_param_ [PrintStr()] >> '{' >> +memory_data_param_statements_ >> '}';
+        memory_data_param_statements_ = batch_size_
+                                       | channels_
+                                       | height_
+                                       | width_
+                                       ;
+
         layer_  = tok.layer_ [PrintStr()] >> '{' >> +layer_statements_ >> '}';
         layer_statements_ = name_
                            | type_
                            | bottom_
                            | top_
+                           | include_
                            | param_
                            | convolution_param_
                            | pooling_param_
                            | lrn_param_
                            | inner_product_param_
                            | dropout_param_
+                           | data_param_
+                           | transform_param_
+                           | memory_data_param_
                            ;      
     
 		qi::on_error<qi::fail>
@@ -184,7 +238,9 @@ struct caffe_grammar
                                                      lrn_param_, lrn_param_statements_, pooling_param_, pooling_param_statements_,
                                                      inner_product_param_, inner_product_param_statements_, dropout_param_,
                                                      dropout_param_statements_, layer_, layer_statements_, weight_filler_, weight_filler_statements_,
-                                                     bias_filler_, bias_filler_statements_
+                                                     bias_filler_, bias_filler_statements_, source_, backend_, batch_size_, crop_size_, mirror_,
+                                                     channels_, height_, width_, mean_, std_, value_, data_param_, data_param_statements_,
+                                                     transform_param_, transform_param_statements_, memory_data_param_, memory_data_param_statements_
                                                      ;
 
     qi::rule<Iterator, std::string(), qi::in_state_skipper<Lexer> > string_;
