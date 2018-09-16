@@ -3,17 +3,17 @@
 void
 CaffeParseTreeBuilder::PrintStr(const std::string& str)
 {
-    std::cout << str;
+    std::cout << str << " ";
 }
 
 void
 CaffeParseTreeBuilder::PrintInt(const int& i)
 {
-    std::cout << i;
+    std::cout << i << " ";
 }
 
 void
 CaffeParseTreeBuilder::PrintDouble(const double& d)
 {
-    std::cout << d;
+    std::cout << d << " ";
 }
