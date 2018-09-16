@@ -70,7 +70,7 @@ struct caffe_tokens : lex::lexer<Lexer>
 {
     caffe_tokens()
     {
-        identifier      = "[a-zA-Z_][a-zA-Z0-9_.\\\-]*";
+        identifier      = "[a-zA-Z_][a-zA-Z0-9_.\\\-\\\/]*";
         int_constant    = "[0-9]+";
         double_constant = "[0-9]+.[0-9]+";
         name_           = "name";

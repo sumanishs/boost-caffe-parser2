@@ -113,7 +113,10 @@ struct caffe_grammar
         width_ = tok.width_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
         mean_ = tok.mean_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
         std_ =  tok.std_ [PrintStr()] >> ':' >> tok.double_constant [PrintDouble()];
-        value_ = tok.value_ [PrintStr()] >> ':' >> tok.int_constant [PrintInt()];
+        value_ = tok.value_ [PrintStr()] >> ':' >> value_type_;
+        value_type_ = tok.int_constant [PrintInt()]
+                     | tok.double_constant [PrintDouble()]
+                     ;
 
         param_            = tok.param_            [PrintStr()] >> '{' >> +param_statements_ >> '}';
         param_statements_ = lr_mult_
@@ -239,7 +242,7 @@ struct caffe_grammar
                                                      inner_product_param_, inner_product_param_statements_, dropout_param_,
                                                      dropout_param_statements_, layer_, layer_statements_, weight_filler_, weight_filler_statements_,
                                                      bias_filler_, bias_filler_statements_, source_, backend_, batch_size_, crop_size_, mirror_,
-                                                     channels_, height_, width_, mean_, std_, value_, data_param_, data_param_statements_,
+                                                     channels_, height_, width_, mean_, std_, value_, value_type_, data_param_, data_param_statements_,
                                                      transform_param_, transform_param_statements_, memory_data_param_, memory_data_param_statements_
                                                      ;
 
